@@ -26,41 +26,54 @@ const PROFILE = {
 };
 
 const EXPERIENCE = R.experience.map((e) => ({
-  role: e.role, co: e.co, from: e.from, to: e.to, detail: e.detail,
+  role: e.role,
+  co: e.co,
+  from: e.from,
+  to: e.to,
+  detail: e.detail,
 }));
 
 const SKILLS = {
-  languages:  R.skills.languages,
+  languages: R.skills.languages,
   distributed: R.skills.distributed,
-  backend:    R.skills.backend,
-  mobile:     R.skills.mobile,
-  domains:    R.skills.domains,
-  tools:      [...R.skills.tools, 'an obnoxious number of dotfiles'],
+  backend: R.skills.backend,
+  mobile: R.skills.mobile,
+  domains: R.skills.domains,
+  tools: [...R.skills.tools, 'an obnoxious number of dotfiles'],
 };
 
 const PROJECTS = R.projects.map((p) => ({ name: p.name, tags: p.tags, blurb: p.blurb }));
 const EDUCATION = R.education;
 
 const Banner = ({ light }) => (
-  <pre style={{
-    margin: 0, fontFamily: 'inherit', fontSize: 12, lineHeight: 1.05,
-    color: light ? TERM.fgLight : TERM.fg, whiteSpace: 'pre',
-  }}>{
-` █████╗ ██████╗ ██████╗ ██╗ █████╗ ███╗  ██╗
+  <pre
+    style={{
+      margin: 0,
+      fontFamily: 'inherit',
+      fontSize: 12,
+      lineHeight: 1.05,
+      color: light ? TERM.fgLight : TERM.fg,
+      whiteSpace: 'pre',
+    }}
+  >{` █████╗ ██████╗ ██████╗ ██╗ █████╗ ███╗  ██╗
 ██╔══██╗██╔══██╗██╔══██╗██║██╔══██╗████╗ ██║
 ███████║██║  ██║██████╔╝██║███████║██╔██╗██║
 ██╔══██║██║  ██║██╔══██╗██║██╔══██║██║╚████║
 ██║  ██║██████╔╝██║  ██║██║██║  ██║██║ ╚███║
-╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═╝  ╚══╝   castillejos`
-  }</pre>
+╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝╚═╝  ╚═╝╚═╝  ╚══╝   castillejos`}</pre>
 );
 
 const AsciiArch = ({ light }) => (
-  <pre style={{
-    margin: 0, fontFamily: 'inherit', fontSize: 12, lineHeight: 1.25,
-    color: light ? TERM.fgLight : TERM.fg, whiteSpace: 'pre',
-  }}>{
-`        ┌──────────┐    ┌──────────┐    ┌──────────┐
+  <pre
+    style={{
+      margin: 0,
+      fontFamily: 'inherit',
+      fontSize: 12,
+      lineHeight: 1.25,
+      color: light ? TERM.fgLight : TERM.fg,
+      whiteSpace: 'pre',
+    }}
+  >{`        ┌──────────┐    ┌──────────┐    ┌──────────┐
         │ ios app  │    │ web app  │    │ cli      │
         └────┬─────┘    └────┬─────┘    └────┬─────┘
              └───────────────┼───────────────┘
@@ -84,8 +97,7 @@ const AsciiArch = ({ light }) => (
                        ┌─────▼──────┐
                        │  postgres  │
                        │  (primary) │
-                       └────────────┘`
-  }</pre>
+                       └────────────┘`}</pre>
 );
 
 const AsciiTimeline = ({ light, played }) => {
@@ -94,15 +106,19 @@ const AsciiTimeline = ({ light, played }) => {
   const filled = Math.max(0, Math.min(totalCols, Math.round(totalCols * played)));
   const bar = '█'.repeat(filled) + '░'.repeat(totalCols - filled);
   return (
-    <pre style={{
-      margin: 0, fontFamily: 'inherit', fontSize: 12, lineHeight: 1.3,
-      color: light ? TERM.fgLight : TERM.fg, whiteSpace: 'pre',
-    }}>{
-` 2013        2017          2021         2024     ${years[4]}
+    <pre
+      style={{
+        margin: 0,
+        fontFamily: 'inherit',
+        fontSize: 12,
+        lineHeight: 1.3,
+        color: light ? TERM.fgLight : TERM.fg,
+        whiteSpace: 'pre',
+      }}
+    >{` 2013        2017          2021         2024     ${years[4]}
  ├─────────┼────────────┼───────────┼─────────┼
  ${bar}
- │ Mobile lead │ Architect    │ Staff       │ Principal `
-    }</pre>
+ │ Mobile lead │ Architect    │ Staff       │ Principal `}</pre>
   );
 };
 
@@ -115,30 +131,55 @@ const ProjectList = ({ filter, setFilter, light }) => {
         {tags.map((t) => {
           const active = filter === t;
           return (
-            <button key={t} onClick={() => setFilter(t)} style={{
-              fontFamily: 'inherit', fontSize: 12,
-              padding: '4px 9px',
-              border: `1px solid ${light ? TERM.dimLight : TERM.dim}`,
-              background: active ? (light ? TERM.fgLight : TERM.fg) : 'transparent',
-              color: active ? (light ? TERM.bgLight : TERM.bg) : (light ? TERM.fgLight : TERM.fg),
-              cursor: 'pointer', borderRadius: 0,
-            }}>--filter={t}</button>
+            <button
+              key={t}
+              onClick={() => setFilter(t)}
+              style={{
+                fontFamily: 'inherit',
+                fontSize: 12,
+                padding: '4px 9px',
+                border: `1px solid ${light ? TERM.dimLight : TERM.dim}`,
+                background: active ? (light ? TERM.fgLight : TERM.fg) : 'transparent',
+                color: active ? (light ? TERM.bgLight : TERM.bg) : light ? TERM.fgLight : TERM.fg,
+                cursor: 'pointer',
+                borderRadius: 0,
+              }}
+            >
+              --filter={t}
+            </button>
           );
         })}
       </div>
       <div style={{ display: 'grid', gap: 10 }}>
         {filtered.map((p) => (
-          <div key={p.name} style={{
-            border: `1px solid ${light ? TERM.dimLight : TERM.dim}`,
-            padding: '12px 14px',
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 12 }}>
+          <div
+            key={p.name}
+            style={{
+              border: `1px solid ${light ? TERM.dimLight : TERM.dim}`,
+              padding: '12px 14px',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'baseline',
+                gap: 12,
+              }}
+            >
               <span style={{ fontWeight: 600 }}>{p.name}/</span>
               <span style={{ fontSize: 11, color: light ? TERM.dimLight : TERM.dim }}>
                 {p.tags.map((t) => `#${t}`).join(' ')}
               </span>
             </div>
-            <div style={{ marginTop: 6, fontSize: 13, color: light ? TERM.fgLight : TERM.fg, opacity: 0.85 }}>
+            <div
+              style={{
+                marginTop: 6,
+                fontSize: 13,
+                color: light ? TERM.fgLight : TERM.fg,
+                opacity: 0.85,
+              }}
+            >
               {p.blurb}
             </div>
           </div>
@@ -183,11 +224,12 @@ function CommandLine({ light, setLight, jumpTo }) {
       `${PROFILE.location}`,
       `started in mathematics. learned to program. now i take things apart for a living.`,
     ],
-    experience: () => EXPERIENCE.flatMap((e) => [
-      `${e.from}–${e.to} · ${e.role} @ ${e.co}`,
-      `  ${e.detail}`,
-      '',
-    ]).slice(0, -1),
+    experience: () =>
+      EXPERIENCE.flatMap((e) => [
+        `${e.from}–${e.to} · ${e.role} @ ${e.co}`,
+        `  ${e.detail}`,
+        '',
+      ]).slice(0, -1),
     skills: (arg) => {
       if (arg && SKILLS[arg]) return [`${arg}: ${SKILLS[arg].join(', ')}`];
       if (arg) return [`unknown area "${arg}". try one of: ${Object.keys(SKILLS).join(', ')}`];
@@ -205,8 +247,14 @@ function CommandLine({ light, setLight, jumpTo }) {
       `linkedin  ${PROFILE.linkedin}`,
     ],
     theme: (arg) => {
-      if (arg === 'l' || arg === 'light') { setLight(true);  return ['→ light mode']; }
-      if (arg === 'd' || arg === 'dark')  { setLight(false); return ['→ dark mode']; }
+      if (arg === 'l' || arg === 'light') {
+        setLight(true);
+        return ['→ light mode'];
+      }
+      if (arg === 'd' || arg === 'dark') {
+        setLight(false);
+        return ['→ dark mode'];
+      }
       setLight((v) => !v);
       return ['→ toggled'];
     },
@@ -241,28 +289,48 @@ function CommandLine({ light, setLight, jumpTo }) {
   const promptStr = `${PROFILE.user}@${PROFILE.host}:~$`;
 
   return (
-    <div onClick={() => inputRef.current && inputRef.current.focus()}
+    <div
+      onClick={() => inputRef.current && inputRef.current.focus()}
       style={{
         border: `1px solid ${light ? TERM.dimLight : TERM.dim}`,
         background: light ? '#f3f1ec' : '#000',
         color: light ? TERM.fgLight : TERM.fg,
-        fontFamily: 'inherit', fontSize: 13, lineHeight: 1.55,
-        height: 290, display: 'flex', flexDirection: 'column', cursor: 'text',
-      }}>
-      <div style={{
-        padding: '6px 12px', borderBottom: `1px solid ${light ? TERM.dimLight : TERM.dim}`,
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11,
-        opacity: 0.7,
-      }}>
-        <span>● ● ●   bash — ~/resume</span>
+        fontFamily: 'inherit',
+        fontSize: 13,
+        lineHeight: 1.55,
+        height: 290,
+        display: 'flex',
+        flexDirection: 'column',
+        cursor: 'text',
+      }}
+    >
+      <div
+        style={{
+          padding: '6px 12px',
+          borderBottom: `1px solid ${light ? TERM.dimLight : TERM.dim}`,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          fontSize: 11,
+          opacity: 0.7,
+        }}
+      >
+        <span>● ● ● bash — ~/resume</span>
         <span>120×40</span>
       </div>
       <div ref={scrollRef} style={{ flex: 1, overflow: 'auto', padding: '10px 12px' }}>
         {history.map((h, i) => (
           <div key={i} style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-            {h.kind === 'cmd'
-              ? <><span style={{ color: light ? TERM.fgLight : TERM.fg, opacity: 0.55 }}>{promptStr}</span> {h.text}</>
-              : h.text}
+            {h.kind === 'cmd' ? (
+              <>
+                <span style={{ color: light ? TERM.fgLight : TERM.fg, opacity: 0.55 }}>
+                  {promptStr}
+                </span>{' '}
+                {h.text}
+              </>
+            ) : (
+              h.text
+            )}
           </div>
         ))}
         <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -271,17 +339,33 @@ function CommandLine({ light, setLight, jumpTo }) {
             ref={inputRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => { if (e.key === 'Enter') { run(input); setInput(''); } }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                run(input);
+                setInput('');
+              }
+            }}
             spellCheck={false}
             style={{
-              flex: 1, background: 'transparent', border: 'none', outline: 'none',
-              color: 'inherit', font: 'inherit', padding: 0,
+              flex: 1,
+              background: 'transparent',
+              border: 'none',
+              outline: 'none',
+              color: 'inherit',
+              font: 'inherit',
+              padding: 0,
             }}
           />
-          <span style={{
-            width: 7, height: 14, background: light ? TERM.fgLight : TERM.fg, opacity: 0.7,
-            animation: 'tterm-blink 1s steps(2) infinite', marginLeft: 1,
-          }} />
+          <span
+            style={{
+              width: 7,
+              height: 14,
+              background: light ? TERM.fgLight : TERM.fg,
+              opacity: 0.7,
+              animation: 'tterm-blink 1s steps(2) infinite',
+              marginLeft: 1,
+            }}
+          />
         </div>
       </div>
       <style>{`@keyframes tterm-blink{50%{opacity:0}}`}</style>
@@ -293,12 +377,17 @@ export default function TerminalResume() {
   const [light, setLight] = React.useState(false);
   const [filter, setFilter] = React.useState('all');
   const [played, setPlayed] = React.useState(0);
-  const refs = {
-    experience: React.useRef(null),
-    skills: React.useRef(null),
-    projects: React.useRef(null),
-    architecture: React.useRef(null),
-    contact: React.useRef(null),
+  const experienceRef = React.useRef(null);
+  const skillsRef = React.useRef(null);
+  const projectsRef = React.useRef(null);
+  const architectureRef = React.useRef(null);
+  const contactRef = React.useRef(null);
+  const sectionRefs = {
+    experience: experienceRef,
+    skills: skillsRef,
+    projects: projectsRef,
+    architecture: architectureRef,
+    contact: contactRef,
   };
 
   React.useEffect(() => {
@@ -314,7 +403,7 @@ export default function TerminalResume() {
   }, []);
 
   const jumpTo = (key) => {
-    const el = refs[key] && refs[key].current;
+    const el = sectionRefs[key] && sectionRefs[key].current;
     if (!el) return;
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
@@ -324,25 +413,48 @@ export default function TerminalResume() {
   const dim = light ? TERM.dimLight : TERM.dim;
 
   return (
-    <div style={{
-      width: '100%', minHeight: '100%',
-      background: bg, color: fg,
-      fontFamily: '"JetBrains Mono", "SFMono-Regular", Menlo, monospace',
-      fontSize: 13, lineHeight: 1.55,
-      padding: '36px 44px 56px',
-      boxSizing: 'border-box',
-    }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        fontSize: 11, opacity: 0.65, marginBottom: 24, borderBottom: `1px dashed ${dim}`, paddingBottom: 10 }}>
+    <div
+      style={{
+        width: '100%',
+        minHeight: '100%',
+        background: bg,
+        color: fg,
+        fontFamily: '"JetBrains Mono", "SFMono-Regular", Menlo, monospace',
+        fontSize: 13,
+        lineHeight: 1.55,
+        padding: '36px 44px 56px',
+        boxSizing: 'border-box',
+      }}
+    >
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          fontSize: 11,
+          opacity: 0.65,
+          marginBottom: 24,
+          borderBottom: `1px dashed ${dim}`,
+          paddingBottom: 10,
+        }}
+      >
         <span>~/resume · main · adrian@circuitly</span>
         <span style={{ display: 'flex', gap: 14 }}>
-          <button onClick={() => setLight((v) => !v)} style={{
-            background: 'transparent', border: `1px solid ${dim}`, color: fg,
-            fontFamily: 'inherit', fontSize: 11, padding: '2px 8px', cursor: 'pointer',
-          }}>
+          <button
+            onClick={() => setLight((v) => !v)}
+            style={{
+              background: 'transparent',
+              border: `1px solid ${dim}`,
+              color: fg,
+              fontFamily: 'inherit',
+              fontSize: 11,
+              padding: '2px 8px',
+              cursor: 'pointer',
+            }}
+          >
             [{light ? 'L' : 'D'}] theme:{light ? 'light' : 'dark'}
           </button>
-          <span>{new Date().toISOString().slice(0,10)}</span>
+          <span>{new Date().toISOString().slice(0, 10)}</span>
         </span>
       </div>
 
@@ -359,14 +471,23 @@ export default function TerminalResume() {
 
       <CommandLine light={light} setLight={setLight} jumpTo={jumpTo} />
 
-      <section ref={refs.experience} style={{ marginTop: 36 }}>
+      <section ref={experienceRef} style={{ marginTop: 36 }}>
         <Heading dim={dim} num="01" title="experience" cmd="cat experience.log" />
         <div style={{ marginTop: 14, display: 'grid', gap: 16 }}>
           {EXPERIENCE.map((e) => (
-            <div key={`${e.co}-${e.from}`} style={{ borderLeft: `2px solid ${fg}`, paddingLeft: 14 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                <span style={{ fontWeight: 600 }}>{e.role} @ {e.co}</span>
-                <span style={{ color: dim, fontSize: 12 }}>{e.from} → {e.to}</span>
+            <div
+              key={`${e.co}-${e.from}`}
+              style={{ borderLeft: `2px solid ${fg}`, paddingLeft: 14 }}
+            >
+              <div
+                style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}
+              >
+                <span style={{ fontWeight: 600 }}>
+                  {e.role} @ {e.co}
+                </span>
+                <span style={{ color: dim, fontSize: 12 }}>
+                  {e.from} → {e.to}
+                </span>
               </div>
               <div style={{ marginTop: 6, opacity: 0.85 }}>{e.detail}</div>
             </div>
@@ -378,14 +499,25 @@ export default function TerminalResume() {
         <Heading dim={dim} num="02" title="timeline" cmd="./timeline --animate" />
         <div style={{ marginTop: 14 }}>
           <AsciiTimeline light={light} played={played} />
-          <button onClick={() => setPlayed(0)} style={{
-            marginTop: 10, background: 'transparent', border: `1px solid ${dim}`, color: fg,
-            fontFamily: 'inherit', fontSize: 11, padding: '3px 9px', cursor: 'pointer',
-          }}>▷ replay</button>
+          <button
+            onClick={() => setPlayed(0)}
+            style={{
+              marginTop: 10,
+              background: 'transparent',
+              border: `1px solid ${dim}`,
+              color: fg,
+              fontFamily: 'inherit',
+              fontSize: 11,
+              padding: '3px 9px',
+              cursor: 'pointer',
+            }}
+          >
+            ▷ replay
+          </button>
         </div>
       </section>
 
-      <section ref={refs.skills} style={{ marginTop: 36 }}>
+      <section ref={skillsRef} style={{ marginTop: 36 }}>
         <Heading dim={dim} num="03" title="skills" cmd="ls ~/skills" />
         <div style={{ marginTop: 14, display: 'grid', gap: 6 }}>
           {Object.entries(SKILLS).map(([k, v]) => (
@@ -397,7 +529,7 @@ export default function TerminalResume() {
         </div>
       </section>
 
-      <section ref={refs.architecture} style={{ marginTop: 36 }}>
+      <section ref={architectureRef} style={{ marginTop: 36 }}>
         <Heading dim={dim} num="04" title="architecture" cmd="cat ~/systems/canonical.txt" />
         <div style={{ marginTop: 14, padding: 16, overflow: 'auto', border: `1px solid ${dim}` }}>
           <AsciiArch light={light} />
@@ -407,7 +539,7 @@ export default function TerminalResume() {
         </div>
       </section>
 
-      <section ref={refs.projects} style={{ marginTop: 36 }}>
+      <section ref={projectsRef} style={{ marginTop: 36 }}>
         <Heading dim={dim} num="05" title="projects" cmd="grep -r open-source ~/" />
         <div style={{ marginTop: 14 }}>
           <ProjectList filter={filter} setFilter={setFilter} light={light} />
@@ -419,7 +551,9 @@ export default function TerminalResume() {
         <div style={{ marginTop: 14 }}>
           {EDUCATION.map((e) => (
             <div key={e.school}>
-              <div style={{ fontWeight: 600 }}>{e.degree} · {e.school}</div>
+              <div style={{ fontWeight: 600 }}>
+                {e.degree} · {e.school}
+              </div>
               {e.year && <div style={{ color: dim, fontSize: 12 }}>{e.year}</div>}
               <div style={{ marginTop: 4, opacity: 0.85 }}>{e.note}</div>
             </div>
@@ -427,16 +561,33 @@ export default function TerminalResume() {
         </div>
       </section>
 
-      <section ref={refs.contact} style={{ marginTop: 36 }}>
+      <section ref={contactRef} style={{ marginTop: 36 }}>
         <Heading dim={dim} num="07" title="contact" cmd="cat ~/.contact" />
         <div style={{ marginTop: 14, display: 'grid', gap: 6 }}>
-          <div><span style={{ color: dim }}>email     </span>{PROFILE.email}</div>
-          <div><span style={{ color: dim }}>github    </span>{PROFILE.github}</div>
-          <div><span style={{ color: dim }}>linkedin  </span>{PROFILE.linkedin}</div>
+          <div>
+            <span style={{ color: dim }}>email </span>
+            {PROFILE.email}
+          </div>
+          <div>
+            <span style={{ color: dim }}>github </span>
+            {PROFILE.github}
+          </div>
+          <div>
+            <span style={{ color: dim }}>linkedin </span>
+            {PROFILE.linkedin}
+          </div>
         </div>
       </section>
 
-      <div style={{ marginTop: 50, fontSize: 11, color: dim, borderTop: `1px dashed ${dim}`, paddingTop: 14 }}>
+      <div
+        style={{
+          marginTop: 50,
+          fontSize: 11,
+          color: dim,
+          borderTop: `1px dashed ${dim}`,
+          paddingTop: 14,
+        }}
+      >
         {'$ echo "thanks for reading. now type `help` in the terminal above." > /dev/null'}
       </div>
     </div>
@@ -447,9 +598,18 @@ function Heading({ dim, num, title, cmd }) {
   return (
     <div>
       <div style={{ fontSize: 11, color: dim, marginBottom: 4 }}>
-        <span style={{ opacity: 0.55 }}>$ </span>{cmd}
+        <span style={{ opacity: 0.55 }}>$ </span>
+        {cmd}
       </div>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 10, borderBottom: `1px solid ${dim}`, paddingBottom: 6 }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'baseline',
+          gap: 10,
+          borderBottom: `1px solid ${dim}`,
+          paddingBottom: 6,
+        }}
+      >
         <span style={{ color: dim, fontSize: 12 }}>[{num}]</span>
         <span style={{ fontSize: 18, fontWeight: 700, letterSpacing: -0.2 }}>{title}</span>
       </div>

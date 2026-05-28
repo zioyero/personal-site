@@ -72,34 +72,23 @@ const TWEAKS_STYLE = `
   .twk-toggle[data-on="1"] i{transform:translateX(14px)}
 `;
 
-export function useTweaks(defaults) {
-  const [values, setValues] = React.useState(defaults);
-  const setTweak = React.useCallback((keyOrEdits, val) => {
-    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
-      ? keyOrEdits : { [keyOrEdits]: val };
-    setValues((prev) => ({ ...prev, ...edits }));
-  }, []);
-  return [values, setTweak];
-}
-
 export function TweaksPanel({ title = 'Tweaks', children }) {
   const [open, setOpen] = React.useState(false);
+  const [pos, setPos] = React.useState({ x: 16, y: 16 });
   const dragRef = React.useRef(null);
-  const offsetRef = React.useRef({ x: 16, y: 16 });
   const PAD = 16;
 
   const clampToViewport = React.useCallback(() => {
     const panel = dragRef.current;
     if (!panel) return;
-    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const w = panel.offsetWidth,
+      h = panel.offsetHeight;
     const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
     const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
-    offsetRef.current = {
-      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
-      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
-    };
-    panel.style.right = offsetRef.current.x + 'px';
-    panel.style.bottom = offsetRef.current.y + 'px';
+    setPos((p) => ({
+      x: Math.min(maxRight, Math.max(PAD, p.x)),
+      y: Math.min(maxBottom, Math.max(PAD, p.y)),
+    }));
   }, []);
 
   React.useEffect(() => {
@@ -118,15 +107,19 @@ export function TweaksPanel({ title = 'Tweaks', children }) {
     const panel = dragRef.current;
     if (!panel) return;
     const r = panel.getBoundingClientRect();
-    const sx = e.clientX, sy = e.clientY;
+    const sx = e.clientX,
+      sy = e.clientY;
     const startRight = window.innerWidth - r.right;
     const startBottom = window.innerHeight - r.bottom;
+    const w = panel.offsetWidth,
+      h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
     const move = (ev) => {
-      offsetRef.current = {
-        x: startRight - (ev.clientX - sx),
-        y: startBottom - (ev.clientY - sy),
-      };
-      clampToViewport();
+      setPos({
+        x: Math.min(maxRight, Math.max(PAD, startRight - (ev.clientX - sx))),
+        y: Math.min(maxBottom, Math.max(PAD, startBottom - (ev.clientY - sy))),
+      });
     };
     const up = () => {
       window.removeEventListener('mousemove', move);
@@ -149,17 +142,19 @@ export function TweaksPanel({ title = 'Tweaks', children }) {
   return (
     <>
       <style>{TWEAKS_STYLE}</style>
-      <div ref={dragRef} className="twk-panel"
-           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+      <div ref={dragRef} className="twk-panel" style={{ right: pos.x, bottom: pos.y }}>
         <div className="twk-hd" onMouseDown={onDragStart}>
           <b>{title}</b>
-          <button className="twk-x" aria-label="Close tweaks"
-                  onMouseDown={(e) => e.stopPropagation()}
-                  onClick={() => setOpen(false)}>✕</button>
+          <button
+            className="twk-x"
+            aria-label="Close tweaks"
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={() => setOpen(false)}
+          >
+            ✕
+          </button>
         </div>
-        <div className="twk-body">
-          {children}
-        </div>
+        <div className="twk-body">{children}</div>
       </div>
     </>
   );
@@ -189,10 +184,19 @@ function TweakRow({ label, value, children, inline = false }) {
 export function TweakToggle({ label, value, onChange }) {
   return (
     <div className="twk-row twk-row-h">
-      <div className="twk-lbl"><span>{label}</span></div>
-      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
-              role="switch" aria-checked={!!value}
-              onClick={() => onChange(!value)}><i /></button>
+      <div className="twk-lbl">
+        <span>{label}</span>
+      </div>
+      <button
+        type="button"
+        className="twk-toggle"
+        data-on={value ? '1' : '0'}
+        role="switch"
+        aria-checked={!!value}
+        onClick={() => onChange(!value)}
+      >
+        <i />
+      </button>
     </div>
   );
 }
@@ -201,7 +205,9 @@ export function TweakRadio({ label, value, options, onChange }) {
   const trackRef = React.useRef(null);
   const [dragging, setDragging] = React.useState(false);
   const valueRef = React.useRef(value);
-  valueRef.current = value;
+  React.useEffect(() => {
+    valueRef.current = value;
+  }, [value]);
 
   const labelLen = (o) => String(typeof o === 'object' ? o.label : o).length;
   const maxLen = options.reduce((m, o) => Math.max(m, labelLen(o)), 0);
@@ -211,11 +217,20 @@ export function TweakRadio({ label, value, options, onChange }) {
       const m = options.find((o) => String(typeof o === 'object' ? o.value : o) === s);
       return m === undefined ? s : typeof m === 'object' ? m.value : m;
     };
-    return <TweakSelect label={label} value={value} options={options}
-                        onChange={(s) => onChange(resolve(s))} />;
+    return (
+      <TweakSelect
+        label={label}
+        value={value}
+        options={options}
+        onChange={(s) => onChange(resolve(s))}
+      />
+    );
   }
   const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
-  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const idx = Math.max(
+    0,
+    opts.findIndex((o) => o.value === value),
+  );
   const n = opts.length;
 
   const segAt = (clientX) => {
@@ -245,11 +260,19 @@ export function TweakRadio({ label, value, options, onChange }) {
 
   return (
     <TweakRow label={label}>
-      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
-           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
-        <div className="twk-seg-thumb"
-             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
-                      width: `calc((100% - 4px) / ${n})` }} />
+      <div
+        ref={trackRef}
+        role="radiogroup"
+        onPointerDown={onPointerDown}
+        className={dragging ? 'twk-seg dragging' : 'twk-seg'}
+      >
+        <div
+          className="twk-seg-thumb"
+          style={{
+            left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
+            width: `calc((100% - 4px) / ${n})`,
+          }}
+        />
         {opts.map((o) => (
           <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
             {o.label}
@@ -267,7 +290,11 @@ export function TweakSelect({ label, value, options, onChange }) {
         {options.map((o) => {
           const v = typeof o === 'object' ? o.value : o;
           const l = typeof o === 'object' ? o.label : o;
-          return <option key={v} value={v}>{l}</option>;
+          return (
+            <option key={v} value={v}>
+              {l}
+            </option>
+          );
         })}
       </select>
     </TweakRow>
