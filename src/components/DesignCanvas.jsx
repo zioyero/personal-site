@@ -49,12 +49,10 @@ export function DesignCanvas({ children, minScale = 0.1, maxScale = 4, style }) 
 
   const registry = {};
   const sectionMeta = {};
-  const sectionOrder = [];
   dcFlatten(children).forEach((sec) => {
     if (!sec || sec.type !== DCSection) return;
     const sid = sec.props.id ?? sec.props.title;
     if (!sid) return;
-    sectionOrder.push(sid);
     const slotIds = [];
     dcFlatten(sec.props.children).forEach((ab) => {
       if (!ab || ab.type !== DCArtboard) return;
@@ -78,7 +76,7 @@ export function DesignCanvas({ children, minScale = 0.1, maxScale = 4, style }) 
     <DCCtx.Provider value={api}>
       <DCViewport minScale={minScale} maxScale={maxScale} style={style}>{children}</DCViewport>
       {focus && registry[focus] && (
-        <DCFocusOverlay entry={registry[focus]} sectionMeta={sectionMeta} sectionOrder={sectionOrder} setFocus={setFocus} />
+        <DCFocusOverlay entry={registry[focus]} sectionMeta={sectionMeta} setFocus={setFocus} />
       )}
     </DCCtx.Provider>
   );
@@ -229,7 +227,7 @@ export function DCSection({ id, title, subtitle, children, gap = 48 }) {
 
 export function DCArtboard() { return null; }
 
-function DCArtboardFrame({ sectionId, artboard, onFocus }) {
+function DCArtboardFrame({ artboard, onFocus }) {
   const { id: rawId, label, width = 260, height = 480, children, style = {} } = artboard.props;
   const id = rawId ?? label;
   return (
@@ -253,7 +251,22 @@ function DCArtboardFrame({ sectionId, artboard, onFocus }) {
   );
 }
 
-function DCFocusOverlay({ entry, sectionMeta, sectionOrder, setFocus }) {
+function FocusArrow({ dir, onClick }) {
+  return (
+    <button onClick={(e) => { e.stopPropagation(); onClick(); }}
+      style={{ position: 'absolute', top: '50%', [dir]: 28, transform: 'translateY(-50%)',
+        border: 'none', background: 'rgba(255,255,255,.08)', color: 'rgba(255,255,255,.9)',
+        width: 44, height: 44, borderRadius: 22, fontSize: 18, cursor: 'pointer',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s' }}
+      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,.18)')}
+      onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,.08)')}>
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+        <path d={dir === 'left' ? 'M11 3L5 9l6 6' : 'M7 3l6 6-6 6'} /></svg>
+    </button>
+  );
+}
+
+function DCFocusOverlay({ entry, sectionMeta, setFocus }) {
   const { sectionId, artboard } = entry;
   const meta = sectionMeta[sectionId];
   const peers = meta.slotIds;
@@ -281,19 +294,6 @@ function DCFocusOverlay({ entry, sectionMeta, sectionOrder, setFocus }) {
     window.addEventListener('resize', r); return () => window.removeEventListener('resize', r);
   }, []);
   const scale = Math.max(0.1, Math.min((vp.w - 200) / width, (vp.h - 260) / height, 2));
-
-  const Arrow = ({ dir, onClick }) => (
-    <button onClick={(e) => { e.stopPropagation(); onClick(); }}
-      style={{ position: 'absolute', top: '50%', [dir]: 28, transform: 'translateY(-50%)',
-        border: 'none', background: 'rgba(255,255,255,.08)', color: 'rgba(255,255,255,.9)',
-        width: 44, height: 44, borderRadius: 22, fontSize: 18, cursor: 'pointer',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .15s' }}
-      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,.18)')}
-      onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(255,255,255,.08)')}>
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-        <path d={dir === 'left' ? 'M11 3L5 9l6 6' : 'M7 3l6 6-6 6'} /></svg>
-    </button>
-  );
 
   return ReactDOM.createPortal(
     <div onClick={() => setFocus(null)}
@@ -323,8 +323,8 @@ function DCFocusOverlay({ entry, sectionMeta, sectionOrder, setFocus }) {
           <span style={{ opacity: .5, marginLeft: 10, fontVariantNumeric: 'tabular-nums' }}>{idx + 1} / {peers.length}</span>
         </div>
       </div>
-      <Arrow dir="left" onClick={() => go(-1)} />
-      <Arrow dir="right" onClick={() => go(1)} />
+      <FocusArrow dir="left" onClick={() => go(-1)} />
+      <FocusArrow dir="right" onClick={() => go(1)} />
     </div>,
     document.body,
   );

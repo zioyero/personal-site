@@ -360,7 +360,7 @@ export default function TerminalResume() {
       <CommandLine light={light} setLight={setLight} jumpTo={jumpTo} />
 
       <section ref={refs.experience} style={{ marginTop: 36 }}>
-        <Heading light={light} dim={dim} num="01" title="experience" cmd="cat experience.log" />
+        <Heading dim={dim} num="01" title="experience" cmd="cat experience.log" />
         <div style={{ marginTop: 14, display: 'grid', gap: 16 }}>
           {EXPERIENCE.map((e) => (
             <div key={`${e.co}-${e.from}`} style={{ borderLeft: `2px solid ${fg}`, paddingLeft: 14 }}>
@@ -375,7 +375,7 @@ export default function TerminalResume() {
       </section>
 
       <section style={{ marginTop: 36 }}>
-        <Heading light={light} dim={dim} num="02" title="timeline" cmd="./timeline --animate" />
+        <Heading dim={dim} num="02" title="timeline" cmd="./timeline --animate" />
         <div style={{ marginTop: 14 }}>
           <AsciiTimeline light={light} played={played} />
           <button onClick={() => setPlayed(0)} style={{
@@ -386,7 +386,7 @@ export default function TerminalResume() {
       </section>
 
       <section ref={refs.skills} style={{ marginTop: 36 }}>
-        <Heading light={light} dim={dim} num="03" title="skills" cmd="ls ~/skills" />
+        <Heading dim={dim} num="03" title="skills" cmd="ls ~/skills" />
         <div style={{ marginTop: 14, display: 'grid', gap: 6 }}>
           {Object.entries(SKILLS).map(([k, v]) => (
             <div key={k} style={{ display: 'flex', gap: 14 }}>
@@ -398,24 +398,24 @@ export default function TerminalResume() {
       </section>
 
       <section ref={refs.architecture} style={{ marginTop: 36 }}>
-        <Heading light={light} dim={dim} num="04" title="architecture" cmd="cat ~/systems/canonical.txt" />
+        <Heading dim={dim} num="04" title="architecture" cmd="cat ~/systems/canonical.txt" />
         <div style={{ marginTop: 14, padding: 16, overflow: 'auto', border: `1px solid ${dim}` }}>
           <AsciiArch light={light} />
         </div>
         <div style={{ marginTop: 6, fontSize: 11, color: dim }}>
-          // one of the dozen-or-so distributed systems I’ve drawn on a whiteboard at 11pm.
+          {'// one of the dozen-or-so distributed systems I’ve drawn on a whiteboard at 11pm.'}
         </div>
       </section>
 
       <section ref={refs.projects} style={{ marginTop: 36 }}>
-        <Heading light={light} dim={dim} num="05" title="projects" cmd="grep -r open-source ~/" />
+        <Heading dim={dim} num="05" title="projects" cmd="grep -r open-source ~/" />
         <div style={{ marginTop: 14 }}>
           <ProjectList filter={filter} setFilter={setFilter} light={light} />
         </div>
       </section>
 
       <section style={{ marginTop: 36 }}>
-        <Heading light={light} dim={dim} num="06" title="education" cmd="cat education.txt" />
+        <Heading dim={dim} num="06" title="education" cmd="cat education.txt" />
         <div style={{ marginTop: 14 }}>
           {EDUCATION.map((e) => (
             <div key={e.school}>
@@ -428,7 +428,7 @@ export default function TerminalResume() {
       </section>
 
       <section ref={refs.contact} style={{ marginTop: 36 }}>
-        <Heading light={light} dim={dim} num="07" title="contact" cmd="cat ~/.contact" />
+        <Heading dim={dim} num="07" title="contact" cmd="cat ~/.contact" />
         <div style={{ marginTop: 14, display: 'grid', gap: 6 }}>
           <div><span style={{ color: dim }}>email     </span>{PROFILE.email}</div>
           <div><span style={{ color: dim }}>github    </span>{PROFILE.github}</div>
@@ -437,13 +437,13 @@ export default function TerminalResume() {
       </section>
 
       <div style={{ marginTop: 50, fontSize: 11, color: dim, borderTop: `1px dashed ${dim}`, paddingTop: 14 }}>
-        $ echo "thanks for reading. now type \`help\` in the terminal above." &gt; /dev/null
+        {'$ echo "thanks for reading. now type `help` in the terminal above." > /dev/null'}
       </div>
     </div>
   );
 }
 
-function Heading({ light, dim, num, title, cmd }) {
+function Heading({ dim, num, title, cmd }) {
   return (
     <div>
       <div style={{ fontSize: 11, color: dim, marginBottom: 4 }}>

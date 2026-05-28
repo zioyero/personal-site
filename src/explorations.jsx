@@ -1,4 +1,3 @@
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { DesignCanvas, DCSection, DCArtboard, DCPostIt } from './components/DesignCanvas.jsx';
 import TerminalResume from './components/TerminalResume.jsx';

@@ -83,8 +83,8 @@ export default function MonolithResume() {
       }}>
         <span>{MR.name.toUpperCase()} / {MR.title.toUpperCase()} / V{MR.years}.0</span>
         <span style={{ display: 'flex', gap: 20 }}>
-          <button onClick={() => setShowCmd(true)} style={btn(fg, bg)}>⌘K</button>
-          <button onClick={() => setDark((v) => !v)} style={btn(fg, bg)}>{dark ? 'LIGHT' : 'DARK'}</button>
+          <button onClick={() => setShowCmd(true)} style={btn(fg)}>⌘K</button>
+          <button onClick={() => setDark((v) => !v)} style={btn(fg)}>{dark ? 'LIGHT' : 'DARK'}</button>
         </span>
       </div>
 
@@ -324,7 +324,7 @@ export default function MonolithResume() {
   );
 }
 
-function btn(fg, bg) {
+function btn(fg) {
   return {
     fontFamily: 'inherit', fontSize: 11, fontWeight: 500, letterSpacing: 0.5,
     padding: '4px 10px', cursor: 'pointer',
