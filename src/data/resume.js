@@ -10,9 +10,9 @@ const RESUME = {
   company: 'Circuitly',
   location: 'San Francisco, CA',
   years: 13,
-  email: 'hello@example.dev',
+  email: 'zioyero@gmail.com',
   github: 'github.com/zioyero',
-  website: 'zioyero.github.io',
+  website: 'zioyero.com',
   linkedin: 'linkedin.com/in/zioyero',
 
   // ── about ────────────────────────────────────────────────
